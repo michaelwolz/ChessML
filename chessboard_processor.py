@@ -122,7 +122,7 @@ def warp_image(img, edges):
     return cv2.warpPerspective(img, m, (int(side), int(side)))
 
 
-def cut_chessboard_into_pieces_this_is_its_last_resort(img):
+def cut_chessboard(img):
     side_len = int(img.shape[0] / 8)
     for i in range(8):
         for j in range(8):
@@ -165,7 +165,7 @@ def process_chessboard(src_path):
     dst = warp_image(src, corners)
 
     # Cut chessboard into its 64 tiles
-    cut_chessboard_into_pieces_this_is_its_last_resort(dst)
+    cut_chessboard(dst)
 
     # Just some visualisations for development
     # render_lines(h, (0, 0, 255))
