@@ -1,4 +1,3 @@
 numpy
-opencv
+opencv-python
 scipy
-pytorch

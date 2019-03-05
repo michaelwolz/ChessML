@@ -1,5 +1,6 @@
 import math
 import operator
+import sys
 from collections import defaultdict
 
 import numpy as np
@@ -11,12 +12,12 @@ import scipy.cluster as clstr
 
 def canny(img):
     # Maybe I'll add some auto thresholding here
-    edges = cv2.Canny(img, 100, 200)
+    edges = cv2.Canny(img, 80, 200)
     return edges
 
 
 def hough_lines(img):
-    rho, theta, thresh = 2, np.pi / 180, 650
+    rho, theta, thresh = 2, np.pi / 180, 600
     return cv2.HoughLines(img, rho, theta, thresh)
 
 
@@ -122,57 +123,127 @@ def warp_image(img, edges):
     return cv2.warpPerspective(img, m, (int(side), int(side)))
 
 
-def cut_chessboard(img):
+def cut_chessboard(img, output_path, output_prefix=""):
     side_len = int(img.shape[0] / 8)
     for i in range(8):
         for j in range(8):
             print("Extracting tile:", j + i * 8)
             tile = img[i * side_len: (i + 1) * side_len, j * side_len: (j + 1) * side_len]
-            cv2.imwrite("data/out/" + str(j + i * 8) + ".jpg", tile)
+            cv2.imwrite(output_path + output_prefix + str(j + i * 8) + ".jpg", tile)
 
 
-def process_chessboard(src_path):
+def resize_image(img):
+    """
+    Resizes image to a maximum width of 800px
+    """
+    width = img.shape[1]
+    if width > 800:
+        scale = 800 / width
+        return cv2.resize(img, None, fx=scale, fy=scale)
+    else:
+        return img
+
+
+def process_chessboard(src_path, output_path, output_prefix="", debug=False):
     src = cv2.imread(src_path)
+
+    if src is None:
+        sys.exit("There is no file with this path!")
+
+    src = resize_image(src)
+    src_copy = src.copy()
 
     # Convert to grayscale
     process = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
 
+    if debug:
+        cv2.imshow("Grayscale", process)
+        cv2.waitKey()
+        cv2.destroyWindow("Grayscale")
+
     # Blur to remove disturbing things
     process = cv2.blur(process, (4, 4))
+
+    if debug:
+        cv2.imshow("Blur", process)
+        cv2.waitKey()
+        cv2.destroyWindow("Blur")
 
     # Use Canny Edge Detector https://en.wikipedia.org/wiki/Canny_edge_detector
     process = canny(process)
 
+    if debug:
+        cv2.imshow("Canny", process)
+        cv2.waitKey()
+        cv2.destroyWindow("Canny")
+
     # Dilate image (thicker lines)
     process = cv2.dilate(process, np.ones((3, 3), dtype=np.uint8))
 
-    # Use Hough transform to detect lines
+    if debug:
+        cv2.imshow("Dilate", process)
+        cv2.waitKey()
+        cv2.destroyWindow("Dilate")
+
+    # Use Hough transform to detect lines https://en.wikipedia.org/wiki/Hough_transform
     lines = hough_lines(process)
 
     # Sort lines by horizontal and vertical
     h, v = sort_lines(lines)
 
+    if len(h) < 9 or len(v) < 9:
+        print("There are too less horizontal or vertical lines")
+        return
+
+    if debug:
+        render_lines(src_copy, h, (0, 255, 0))
+        render_lines(src_copy, v, (0, 0, 255))
+        cv2.imshow("Sorted lines", src_copy)
+        cv2.waitKey()
+        cv2.destroyWindow("Sorted lines")
+
     # Calculate intersections of the horizontal and vertical lines
     intersections = calculate_intersections(h, v)
 
+    if debug:
+        render_intersections(src_copy, intersections, (255, 0, 0), 1)
+        cv2.imshow("Intersections", src_copy)
+        cv2.waitKey()
+        cv2.destroyWindow("Intersections")
+
     # Cluster intersection since there are many
-    cluster = cluster_intersections(intersections)
+    clustered = cluster_intersections(intersections)
+    if len(clustered) != 81:
+        print("Something is wrong. There are no 81 intersections.")
+        return
+
+    if debug:
+        src_copy = src.copy()
+        render_intersections(src_copy, clustered, (255, 0, 0), 5)
+        cv2.imshow("Clustered Intersections", src_copy)
+        cv2.waitKey()
+        cv2.destroyWindow("Clustered Intersections")
 
     # Find outer corners of the chessboard
-    corners = find_chessboard_corners(cluster)
+    corners = find_chessboard_corners(clustered)
 
-    # Warp image
+    if debug:
+        src_copy = src.copy()
+        render_intersections(src_copy, corners, (255, 0, 0), 5)
+        cv2.imshow("Corners", src_copy)
+        cv2.waitKey()
+        cv2.destroyWindow("Corners")
+
+    # Warp and crop image
     dst = warp_image(src, corners)
 
-    # Cut chessboard into its 64 tiles
-    cut_chessboard(dst)
+    if debug:
+        cv2.imshow("Warped", dst)
+        cv2.waitKey()
+        cv2.destroyWindow("Warped")
 
-    # Just some visualisations for development
-    # render_lines(h, (0, 0, 255))
-    # render_lines(v, (0, 255, 0))
-    # render_intersections(edges, (255, 0, 0))
-    # cv2.imshow("Source", src)
-    # cv2.waitKey()
+    # Cut chessboard into its 64 tiles
+    cut_chessboard(dst, output_path, output_prefix)
 
 
 def render_lines(img, lines, color):
@@ -185,13 +256,13 @@ def render_lines(img, lines, color):
         cv2.line(img, pt1, pt2, color, 1, cv2.LINE_AA)
 
 
-def render_intersections(img, points, color):
+def render_intersections(img, points, color, size):
     for point in points:
-        cv2.circle(img, (int(point[0]), int(point[1])), 2, color, 5)
+        cv2.circle(img, (int(point[0]), int(point[1])), 2, color, size)
 
 
 def main():
-    process_chessboard('data/chess-sera.jpeg')
+    process_chessboard('data/IMG_3201.jpg', "data/out/", "", False)
 
 
 if __name__ == "__main__":

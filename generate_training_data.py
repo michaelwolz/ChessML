@@ -1,0 +1,16 @@
+import chessboard_processor as cp
+from os import listdir
+
+
+def generate_training_images(path_to_input_files):
+    for i, filename in enumerate(listdir(path_to_input_files)):
+        print("Processing " + filename + "...")
+        cp.process_chessboard(path_to_input_files + filename, "data/train/", str(i), False)
+
+
+def main():
+    generate_training_images("data/chessboards/")
+
+
+if __name__ == "__main__":
+    main()
