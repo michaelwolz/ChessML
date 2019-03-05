@@ -56,7 +56,7 @@ def calculate_intersections(h, v):
     return np.array(points)
 
 
-def cluster_intersections(points, max_dist=50):
+def cluster_intersections(points, max_dist=40):
     # I want to change this to kmeans
     Y = spatial.distance.pdist(points)
     Z = clstr.hierarchy.single(Y)
@@ -127,7 +127,6 @@ def cut_chessboard(img, output_path, output_prefix=""):
     side_len = int(img.shape[0] / 8)
     for i in range(8):
         for j in range(8):
-            print("Extracting tile:", j + i * 8)
             tile = img[i * side_len: (i + 1) * side_len, j * side_len: (j + 1) * side_len]
             cv2.imwrite(output_path + output_prefix + str(j + i * 8) + ".jpg", tile)
 
@@ -191,16 +190,16 @@ def process_chessboard(src_path, output_path, output_prefix="", debug=False):
     # Sort lines by horizontal and vertical
     h, v = sort_lines(lines)
 
-    if len(h) < 9 or len(v) < 9:
-        print("There are too less horizontal or vertical lines")
-        return
-
     if debug:
         render_lines(src_copy, h, (0, 255, 0))
         render_lines(src_copy, v, (0, 0, 255))
         cv2.imshow("Sorted lines", src_copy)
         cv2.waitKey()
         cv2.destroyWindow("Sorted lines")
+
+    if len(h) < 9 or len(v) < 9:
+        print("There are not enough horizontal and vertical lines in this image.")
+        return
 
     # Calculate intersections of the horizontal and vertical lines
     intersections = calculate_intersections(h, v)
@@ -213,9 +212,6 @@ def process_chessboard(src_path, output_path, output_prefix="", debug=False):
 
     # Cluster intersection since there are many
     clustered = cluster_intersections(intersections)
-    if len(clustered) != 81:
-        print("Something is wrong. There are no 81 intersections.")
-        return
 
     if debug:
         src_copy = src.copy()
@@ -223,6 +219,11 @@ def process_chessboard(src_path, output_path, output_prefix="", debug=False):
         cv2.imshow("Clustered Intersections", src_copy)
         cv2.waitKey()
         cv2.destroyWindow("Clustered Intersections")
+
+    if len(clustered) != 81:
+        print(len(clustered), "intersections found.")
+        print("Something is wrong. There are not 81 intersections.")
+        return
 
     # Find outer corners of the chessboard
     corners = find_chessboard_corners(clustered)
@@ -262,7 +263,7 @@ def render_intersections(img, points, color, size):
 
 
 def main():
-    process_chessboard('data/IMG_3201.jpg', "data/out/", "", False)
+    process_chessboard('data/chessboards/IMG_3395.jpg', "data/out/", "", True)
 
 
 if __name__ == "__main__":

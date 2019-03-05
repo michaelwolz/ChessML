@@ -1,3 +1,5 @@
 .idea
 .DS_Store
-data/out
+data
+.ipynb_checkpoints
+__pycache__
