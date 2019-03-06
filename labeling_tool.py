@@ -90,18 +90,18 @@ class Window:
             self.panel.destroy()
             self.panel.image = None
 
-        img = ImageTk.PhotoImage(Image.open(self.src_path + "/" + self.images[self.current_index]))
-        self.panel = Label(self.master, image=img)
-        self.panel.image = img
-        self.panel.grid(row=2, columnspan=6)
+        if self.current_index < len(self.images):
+            img = ImageTk.PhotoImage(Image.open(self.src_path + "/" + self.images[self.current_index]).resize((200, 200)))
+            self.panel = Label(self.master, image=img)
+            self.panel.image = img
+            self.panel.grid(row=2, columnspan=6)
+            print(str(self.current_index + 1) + "/" + str(len(self.images)))
 
     def label_img(self, label):
         if not self.save_path:
             self.save_path = "out"
             self.initialize_safe_path()
         shutil.copy2(self.src_path + "/" + self.images[self.current_index], self.save_path + "/" + label)
-        os.rename(self.src_path + "/" + self.images[self.current_index],
-                  self.src_path + "/done_" + self.images[self.current_index])
         self.next_image()
 
 

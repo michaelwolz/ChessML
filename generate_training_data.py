@@ -4,8 +4,9 @@ from os import listdir
 
 def generate_training_images(path_to_input_files):
     for i, filename in enumerate(listdir(path_to_input_files)):
-        print("Processing " + filename + "...")
-        cp.process_chessboard(path_to_input_files + filename, "data/train/", str(i), False)
+        if filename.lower().endswith(".jpg") or filename.lower().endswith(".jpeg"):
+            print("Processing " + filename + "...")
+            cp.process_chessboard(path_to_input_files + filename, "data/train/", "a" + str(i), False)
 
 
 def main():

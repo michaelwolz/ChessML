@@ -128,7 +128,7 @@ def cut_chessboard(img, output_path, output_prefix=""):
     for i in range(8):
         for j in range(8):
             tile = img[i * side_len: (i + 1) * side_len, j * side_len: (j + 1) * side_len]
-            cv2.imwrite(output_path + output_prefix + str(j + i * 8) + ".jpg", tile)
+            cv2.imwrite(output_path + output_prefix + "-" + str(j + i * 8) + ".jpg", tile)
 
 
 def resize_image(img):
@@ -198,8 +198,7 @@ def process_chessboard(src_path, output_path, output_prefix="", debug=False):
         cv2.destroyWindow("Sorted lines")
 
     if len(h) < 9 or len(v) < 9:
-        print("There are not enough horizontal and vertical lines in this image.")
-        return
+        print("There are not enough horizontal and vertical lines in this image. Try it anyway!")
 
     # Calculate intersections of the horizontal and vertical lines
     intersections = calculate_intersections(h, v)
@@ -221,9 +220,7 @@ def process_chessboard(src_path, output_path, output_prefix="", debug=False):
         cv2.destroyWindow("Clustered Intersections")
 
     if len(clustered) != 81:
-        print(len(clustered), "intersections found.")
-        print("Something is wrong. There are not 81 intersections.")
-        return
+        print("Something is wrong. There are " + str(len(intersections)) + " instead of 81 intersections.")
 
     # Find outer corners of the chessboard
     corners = find_chessboard_corners(clustered)
@@ -263,7 +260,8 @@ def render_intersections(img, points, color, size):
 
 
 def main():
-    process_chessboard('data/chessboards/IMG_3395.jpg', "data/out/", "", True)
+    # TODO: instead of checking if there are enough intersections and lines, check if the corners are right.
+    process_chessboard('data/chessboards/IMG_3467.jpg', "data/out/", "", True)
 
 
 if __name__ == "__main__":
