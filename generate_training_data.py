@@ -6,7 +6,7 @@ def generate_training_images(path_to_input_files):
     for i, filename in enumerate(listdir(path_to_input_files)):
         if filename.lower().endswith(".jpg") or filename.lower().endswith(".jpeg"):
             print("Processing " + filename + "...")
-            cp.process_chessboard(path_to_input_files + filename, "data/train/", "a" + str(i), False)
+            cp.process_chessboard(path_to_input_files + filename, "data/eval/", str(i), False)
 
 
 def main():
