@@ -10,7 +10,7 @@ def generate_training_images(path_to_input_files):
 
 
 def main():
-    generate_training_images("data/chessboards/")
+    generate_training_images("../data/chessboards/")
 
 
 if __name__ == "__main__":

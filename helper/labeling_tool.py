@@ -5,7 +5,7 @@ from PIL import ImageTk, Image
 import shutil
 
 """
-Simple Labeling Tool for the generated tiles
+Simple Labeling Tool for the generated chess tiles
 """
 
 

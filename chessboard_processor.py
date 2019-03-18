@@ -261,7 +261,7 @@ def render_intersections(img, points, color, size):
 
 def main():
     # TODO: instead of checking if there are enough intersections and lines, check if the corners are right.
-    process_chessboard('data/chessboards/IMG_3467.jpg', "data/out/", "", True)
+    process_chessboard('data/chessboards/processed/IMG_3269.jpg', "data/out/", "", True)
 
 
 if __name__ == "__main__":

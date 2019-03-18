@@ -2,3 +2,6 @@ numpy
 opencv-python
 scipy
 Pillow
+pytorch
+progressbar2
+matplotlib
