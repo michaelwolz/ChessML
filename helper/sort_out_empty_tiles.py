@@ -20,18 +20,14 @@ def sort_out_empty_tiles(model, file_path):
             out = model(img)
             _, prediction = torch.max(out.data, 1)
 
-            if prediction == 1:
-                print("full")
-            else:
-                print("empty")
-
-            # if prediction == 0:
-            #     os.remove(os.path.join(file_path, file))
+            if prediction == 0:
+                print("Delete", file)
+                os.remove(os.path.join(file_path, file))
 
 
 def main():
     model_path = "../model/simple-net.pt"
-    file_path = "../data/test/empty"
+    file_path = "../data/chessboards/val_additional"
 
     if not os.path.exists(model_path):
         print("Model weights were not found")

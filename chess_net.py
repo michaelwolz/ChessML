@@ -7,7 +7,6 @@ import torch.nn.functional as F
 import torch.nn as nn
 import torchvision
 import time
-import matplotlib.pyplot as plt
 import numpy as np
 import progressbar
 
@@ -19,7 +18,6 @@ transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
 ])
-
 
 """
 Sampling data for debugging
@@ -50,12 +48,6 @@ val_loader = torch.utils.data.DataLoader(val_set,
                                          drop_last=True
                                          )
 
-test_set = torchvision.datasets.ImageFolder("./data/validation", transform=transform)
-test_loader = torch.utils.data.DataLoader(test_set,
-                                          batch_size=4,
-                                          num_workers=2,
-                                          shuffle=True,
-                                          )
 
 '''
 Defining classes
@@ -171,32 +163,11 @@ def validate(model, epoch=0):
                   (classes[i], 100 * class_correct[i] / class_total[i], class_correct[i], class_total[i]))
         except ZeroDivisionError:
             print('No Accuracy for %s' % classes[i])
-
-
-def test(model):
-    model.eval()
-
-    dataiter = iter(test_loader)
-    images, labels = dataiter.next()
-
-    out = model(images)
-
-    _, predicted = torch.max(out, 1)
-
-    imshow(torchvision.utils.make_grid(images))
-    print('   Actual: ', ' '.join('%5s' % classes[labels[j]] for j in range(4)))
-    print('Predicted: ', ' '.join('%5s' % classes[predicted[j]] for j in range(4)))
-
-
-def imshow(img):
-    img = img / 2 + 0.5  # denormalize
-    npimg = img.numpy()
-    plt.imshow(np.transpose(npimg, (1, 2, 0)))
-    plt.show()
+    return correct / total  # Returning accuracy
 
 
 def save_model(model, epoch):
-    torch.save(model.state_dict(), "model/chess-net_{}.pt".format(epoch))
+    torch.save(model.state_dict(), "model/chess-net.pt".format(epoch))
     print("\n------- Checkpoint saved -------\n")
 
 
@@ -205,26 +176,28 @@ def main():
 
     # Activate cuda support if available
     if torch.cuda.is_available():
+        print("Activating cuda support!")
         model = model.cuda()
 
     # Defining the loss function
     criterion = nn.CrossEntropyLoss()
 
     # Defining the optimizer
-    optimizer = optim.Adam(model.parameters())
-
-    # Defining a scheduler
-    # scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.1)
+    # optimizer = optim.Adam(model.parameters())
+    # optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+    optimizer = optim.ASGD(model.parameters())
 
     # Start training
     epochs = 20
+    best_acc = 0
     start = time.time()
     print("Starting training for %s epochs on %s" % (epochs, time.ctime()))
     for epoch in range(epochs):
-        # scheduler.step()
         train(model, optimizer, criterion)
-        validate(model, epoch)
-        # save_model(model, epoch)
+        acc = validate(model, epoch)
+        if acc > best_acc:
+            best_acc = acc
+            save_model(model, epoch)
     end = time.time()
     print("Training of the neuroal network done.")
     print("Time spent:", end - start, "s")
