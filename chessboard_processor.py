@@ -157,6 +157,7 @@ def process_chessboard(src_path, output_path, output_prefix="", debug=False):
 
     if debug:
         cv2.imshow("Grayscale", process)
+        cv2.imwrite('grayscale.png', process)
         cv2.waitKey()
         cv2.destroyWindow("Grayscale")
 
@@ -165,6 +166,7 @@ def process_chessboard(src_path, output_path, output_prefix="", debug=False):
 
     if debug:
         cv2.imshow("Blur", process)
+        cv2.imwrite('blur.png', process)
         cv2.waitKey()
         cv2.destroyWindow("Blur")
 
@@ -173,6 +175,7 @@ def process_chessboard(src_path, output_path, output_prefix="", debug=False):
 
     if debug:
         cv2.imshow("Canny", process)
+        cv2.imwrite('canny.png', process)
         cv2.waitKey()
         cv2.destroyWindow("Canny")
 
@@ -181,6 +184,7 @@ def process_chessboard(src_path, output_path, output_prefix="", debug=False):
 
     if debug:
         cv2.imshow("Dilate", process)
+        cv2.imwrite('dilate.png', process)
         cv2.waitKey()
         cv2.destroyWindow("Dilate")
 
@@ -194,6 +198,7 @@ def process_chessboard(src_path, output_path, output_prefix="", debug=False):
         render_lines(src_copy, h, (0, 255, 0))
         render_lines(src_copy, v, (0, 0, 255))
         cv2.imshow("Sorted lines", src_copy)
+        cv2.imwrite('sorted-lines.png', src_copy)
         cv2.waitKey()
         cv2.destroyWindow("Sorted lines")
 
@@ -206,6 +211,7 @@ def process_chessboard(src_path, output_path, output_prefix="", debug=False):
     if debug:
         render_intersections(src_copy, intersections, (255, 0, 0), 1)
         cv2.imshow("Intersections", src_copy)
+        cv2.imwrite('intersections.png', src_copy)
         cv2.waitKey()
         cv2.destroyWindow("Intersections")
 
@@ -216,6 +222,7 @@ def process_chessboard(src_path, output_path, output_prefix="", debug=False):
         src_copy = src.copy()
         render_intersections(src_copy, clustered, (255, 0, 0), 5)
         cv2.imshow("Clustered Intersections", src_copy)
+        cv2.imwrite('clustered-intersections.png', src_copy)
         cv2.waitKey()
         cv2.destroyWindow("Clustered Intersections")
 
@@ -229,6 +236,7 @@ def process_chessboard(src_path, output_path, output_prefix="", debug=False):
         src_copy = src.copy()
         render_intersections(src_copy, corners, (255, 0, 0), 5)
         cv2.imshow("Corners", src_copy)
+        cv2.imwrite('corners.png', src_copy)
         cv2.waitKey()
         cv2.destroyWindow("Corners")
 
@@ -237,6 +245,7 @@ def process_chessboard(src_path, output_path, output_prefix="", debug=False):
 
     if debug:
         cv2.imshow("Warped", dst)
+        cv2.imwrite('warped.png', dst)
         cv2.waitKey()
         cv2.destroyWindow("Warped")
 
@@ -261,7 +270,7 @@ def render_intersections(img, points, color, size):
 
 def main():
     # TODO: instead of checking if there are enough intersections and lines, check if the corners are right.
-    process_chessboard('data/chessboards/processed/IMG_3269.jpg', "data/out/", "", True)
+    process_chessboard('data/demo/demo.jpg', "data/demo/", "", True)
 
 
 if __name__ == "__main__":
