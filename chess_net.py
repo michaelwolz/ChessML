@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 import torch
 import torch.optim as optim
 import torch.nn.functional as F
@@ -30,24 +27,23 @@ train_sampler = SubsetRandomSampler(np.arange(n_training_samples, dtype=np.int64
 Loading the data
 """
 # Train Data
-train_set = torchvision.datasets.ImageFolder(root="./data/train", transform=transform)
+train_set = torchvision.datasets.ImageFolder(root="/content/data/augmented/train", transform=transform)
 train_loader = torch.utils.data.DataLoader(train_set,
                                            batch_size=4,
                                            num_workers=2,
                                            shuffle=True,
                                            # sampler=train_sampler,
-                                           drop_last=True
+                                           drop_last=True,
                                            )
 
 # Validation Data
-val_set = torchvision.datasets.ImageFolder(root="./data/validation", transform=transform)
+val_set = torchvision.datasets.ImageFolder(root="/content/data/augmented/validation", transform=transform)
 val_loader = torch.utils.data.DataLoader(val_set,
                                          batch_size=4,
                                          num_workers=2,
                                          shuffle=True,
-                                         drop_last=True
+                                         drop_last=True,
                                          )
-
 
 '''
 Defining classes
@@ -68,9 +64,9 @@ class ChessNet(nn.Module):
         super(ChessNet, self).__init__()
 
         # Defining the convolutional layers of the net
-        self.conv1 = nn.Conv2d(3, 10, kernel_size=5)
-        self.conv2 = nn.Conv2d(10, 25, kernel_size=5)
-        self.conv3 = nn.Conv2d(25, 50, kernel_size=5)
+        self.conv1 = nn.Conv2d(3, 8, kernel_size=5)
+        self.conv2 = nn.Conv2d(8, 20, kernel_size=5)
+        self.conv3 = nn.Conv2d(20, 50, kernel_size=5)
 
         self.dropout1 = nn.Dropout()
         self.dropout2 = nn.Dropout()
@@ -85,9 +81,11 @@ class ChessNet(nn.Module):
         x = F.max_pool2d(x, 2)
 
         x = F.relu(self.conv2(x))
+        x = self.dropout1(x)
         x = F.max_pool2d(x, 2)
 
         x = F.relu(self.conv3(x))
+        x = self.dropout2(x)
         x = F.max_pool2d(x, 2)
 
         x = x.view(-1, 4 * 4 * 50)  # Convert 2d data to 1d
@@ -167,12 +165,14 @@ def validate(model, epoch=0):
 
 
 def save_model(model, epoch):
-    torch.save(model.state_dict(), "model/chess-net.pt".format(epoch))
+    torch.save(model.state_dict(), "/content/drive/My Drive/ChessNetData/model/chess-net.pt".format(epoch))
     print("\n------- Checkpoint saved -------\n")
 
 
 def main():
     model = ChessNet()
+    # Load Pretrained Model
+    # model.load_state_dict(torch.load("/content/drive/My Drive/ChessNetData/model/chess-net.pt"))
 
     # Activate cuda support if available
     if torch.cuda.is_available():
@@ -183,12 +183,12 @@ def main():
     criterion = nn.CrossEntropyLoss()
 
     # Defining the optimizer
-    # optimizer = optim.Adam(model.parameters())
+    optimizer = optim.Adam(model.parameters())
     # optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
-    optimizer = optim.ASGD(model.parameters())
+    # optimizer = optim.ASGD(model.parameters())
 
     # Start training
-    epochs = 20
+    epochs = 100
     best_acc = 0
     start = time.time()
     print("Starting training for %s epochs on %s" % (epochs, time.ctime()))
@@ -201,11 +201,7 @@ def main():
     end = time.time()
     print("Training of the neuroal network done.")
     print("Time spent:", end - start, "s")
-
-    # Testing the NN
-    # print("\nTest:")
-    # for i in range(4):
-    #     test(model)
+    print("Best-Accuracy: %.2f%%" % (100 * best_acc))
 
 
 if __name__ == "__main__":
