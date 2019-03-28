@@ -6,6 +6,8 @@ from PIL import Image
 from chess_net_simple import SimpleChessNet
 from chess_net_simple import transform
 
+# Using a basic version of the chess net which only detects if there is a piece on a field or not
+# to remove empty tiles
 
 # Removes empty tiles from a given dataset to simplify labeling process
 def sort_out_empty_tiles(model, file_path):

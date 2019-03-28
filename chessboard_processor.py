@@ -11,7 +11,7 @@ import scipy.cluster as clstr
 
 
 def canny(img):
-    # Maybe I'll add some auto thresholding here
+    # Maybe add some auto thresholding here
     edges = cv2.Canny(img, 80, 200)
     return edges
 
@@ -249,7 +249,7 @@ def process_chessboard(src_path, output_path, output_prefix="", debug=False):
         cv2.waitKey()
         cv2.destroyWindow("Warped")
 
-    # Cut chessboard into its 64 tiles
+    # Cut chessboard into 64 tiles
     cut_chessboard(dst, output_path, output_prefix)
 
 
@@ -269,7 +269,7 @@ def render_intersections(img, points, color, size):
 
 
 def main():
-    # TODO: instead of checking if there are enough intersections and lines, check if the corners are right.
+    # TODO: instead of checking if there are enough intersections and lines, check if the corners are correct.
     process_chessboard('data/demo/demo.jpg', "data/demo/", "", True)
 
 
