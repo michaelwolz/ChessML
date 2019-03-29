@@ -7,7 +7,6 @@ import progressbar
 import os
 
 from torchvision import transforms, models
-from torch.utils.data.sampler import SubsetRandomSampler
 
 # Implementation based on resnet18
 # Accuracy of 99% after 12 Epochs of training with 31.200 training images and 7.800 validation images
