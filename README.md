@@ -93,7 +93,7 @@ Empty  | 100 \%
 
 ## Related Work
 
-While the idea for the project came up, it was almost certainly clear that somebody out there must have had the same idea. Many parts of the board localization are based on [[1], [2]].
+When the idea for the project came up, it was almost certainly clear that somebody out there must have had the same idea. Many parts of the board localization are based on [[1], [2]].
 
 ## References
 
