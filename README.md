@@ -69,7 +69,8 @@ Empty  | 100 %
 Since the result of the first training had a very poor accuracy the training was done again using a pretrained version of resnet18 from PyTorch. The result was pretty good and it ended up with an accuracy of 99%.
 
 Epochs: 20<br>
-Best-Accuracy after epoch: 12 Best-Accuracy: 99.00%
+Best-Accuracy after epoch: 12<br>
+Best-Accuracy: 99.00%
 
 Piece  | White  | Black
 ------ | ------ | ------
