@@ -36,7 +36,7 @@ After this, the image is cutted into 64 tiles which are then saved in an output 
 
 The data for training the neural network is based on 417 photographs of one chessboard which resulted in 3900 training (300 per chess piece + empty fields) and 7.800 validation images. Each image was labeled using a simple labeling tool which was specially designed for labeling the chess pieces. It simply moves every image to a corresponding folder with the class name of the piece as name. Afterwards the data was augmented using this [script](data/data_augmention.py). The process ended up in 31.200 training and 7.800 validation images.
 
-To get a better understanding on how convolutional neural networks work the first version was build as a completely new CNN which was trained on [Google Colab](https://colab.research.google.com/). The results are shown below:
+To get a better understanding on how convolutional neural networks work the first version was built as a completely new CNN which was trained on [Google Colab](https://colab.research.google.com/). The results are shown below:
 
 Chess pieces are labeled using their common notation:
 
