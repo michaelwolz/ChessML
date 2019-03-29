@@ -27,7 +27,7 @@ train_sampler = SubsetRandomSampler(np.arange(n_training_samples, dtype=np.int64
 Loading the data
 """
 # Train Data
-train_set = torchvision.datasets.ImageFolder(root="/content/data/augmented/train", transform=transform)
+train_set = torchvision.datasets.ImageFolder(root="./data/augmented/train", transform=transform)
 train_loader = torch.utils.data.DataLoader(train_set,
                                            batch_size=4,
                                            num_workers=2,
@@ -37,7 +37,7 @@ train_loader = torch.utils.data.DataLoader(train_set,
                                            )
 
 # Validation Data
-val_set = torchvision.datasets.ImageFolder(root="/content/data/augmented/validation", transform=transform)
+val_set = torchvision.datasets.ImageFolder(root="./data/augmented/validation", transform=transform)
 val_loader = torch.utils.data.DataLoader(val_set,
                                          batch_size=4,
                                          num_workers=2,
@@ -165,7 +165,7 @@ def validate(model, epoch=0):
 
 
 def save_model(model, epoch):
-    torch.save(model.state_dict(), "/content/drive/My Drive/ChessNetData/model/chess-net.pt".format(epoch))
+    torch.save(model.state_dict(), "./model/chess-net.pt".format(epoch))
     print("\n------- Checkpoint saved -------\n")
 
 
@@ -188,7 +188,7 @@ def main():
     # optimizer = optim.ASGD(model.parameters())
 
     # Start training
-    epochs = 100
+    epochs = 50
     best_acc = 0
     start = time.time()
     print("Starting training for %s epochs on %s" % (epochs, time.ctime()))
