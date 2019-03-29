@@ -97,8 +97,8 @@ When the idea for the project came up, it was almost certainly clear that somebo
 
 ## References
 
-[1] [https://medium.com/@daylenyang/building-chess-id-99afa57326cd](mailto:https://medium.com/@daylenyang/building-chess-id-99afa57326cd)<br>
-[2] [https://medium.com/@neshpatel/solving-sudoku-part-ii-9a7019d196a2](mailto:https://medium.com/@neshpatel/solving-sudoku-part-ii-9a7019d196a2)
+\[1\] [https://medium.com/@daylenyang/building-chess-id-99afa57326cd](mailto:https://medium.com/@daylenyang/building-chess-id-99afa57326cd)<br>
+\[2\] [https://medium.com/@neshpatel/solving-sudoku-part-ii-9a7019d196a2](mailto:https://medium.com/@neshpatel/solving-sudoku-part-ii-9a7019d196a2)
 
 [1]: https://medium.com/@daylenyang/building-chess-id-99afa57326cd
 [2]: https://medium.com/@neshpatel/solving-sudoku-part-ii-9a7019d196a2
