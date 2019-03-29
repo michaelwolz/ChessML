@@ -2,7 +2,7 @@
 
 This project was developed within the scope of independent studies at the [University of Trier](https://www.uni-trier.de/). The main purpose was to get an overview of current machine learning techniques and especially Convolutional Neural Networks.
 
-ChessML performs a basic board localization and piece recognition from photographs made from the above of a chessboard. This is done using [OpenCV](https://opencv.org/) for image processing and [PyTorch](https://pytorch.org/) as framework for the neural network. The training/validation data was generated and labeled by myself and is available [here](https://drive.google.com/file/d/1TKDfcIpuD7qyaxXSBfxeuh4S9vQa653_/view?usp=sharing).
+ChessML performs a basic board localization and piece recognition from photographs made from the above of a chessboard. This is done using [OpenCV](https://opencv.org/) for image processing and [PyTorch](https://pytorch.org/) as framework for the neural network. The training/validation data was generated and labeled by myself and is available [here](https://drive.google.com/file/d/1TKDfcIpuD7qyaxXSBfxeuh4S9vQa653_/view?usp=sharing). The trained model is available [here](https://drive.google.com/file/d/1-4A7AYUz1j9BOSemeiKSwpm04OO9Zq8k/view?usp=sharing).
 
 ## Board Localization
 
