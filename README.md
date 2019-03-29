@@ -9,7 +9,7 @@ ChessML performs a basic board localization and piece recognition from photograp
 The localization of the chessboard uses basically the same idea as in the tutorial of Nesh Patel [[1]] on localization sudoku fields with a few adaptions. The process breaks down to 9 parts:
 
 <p align="center">
-  <img src="misc/images/animation.gif" width="400px" height="400px" alt="Animation">
+  <img src="misc/images/animation.gif" alt="Animation">
 </p>
 
 1. Grayscaling the image
