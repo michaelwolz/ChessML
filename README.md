@@ -2,18 +2,18 @@
 
 This project was developed within the scope of independent studies at the [University of Trier](https://www.uni-trier.de/). The main purpose was to get an overview of current machine learning techniques and especially Convolutional Neural Networks.
 
-ChessML performs a basic board localization and piece recognition from photographs made from the above of a chessboard. This is done using [OpenCV](https://opencv.org/) for image processing and [PyTorch](https://pytorch.org/) as framework for the neural network. The training/validation data was generated and labeled by myself and is available [here](https://drive.google.com/file/d/1TKDfcIpuD7qyaxXSBfxeuh4S9vQa653_/view?usp=sharing). The trained model is available [here](https://drive.google.com/file/d/1-4A7AYUz1j9BOSemeiKSwpm04OO9Zq8k/view?usp=sharing).
+ChessML performs basic board localization and piece recognition from photographs taken from the above a chessboard. This is done using [OpenCV](https://opencv.org/) for image processing and [PyTorch](https://pytorch.org/) as framework for the neural network. The training/validation data was generated and labeled by myself and is available [here](https://drive.google.com/file/d/1TKDfcIpuD7qyaxXSBfxeuh4S9vQa653_/view?usp=sharing). The trained model is available [here](https://drive.google.com/file/d/1-4A7AYUz1j9BOSemeiKSwpm04OO9Zq8k/view?usp=sharing).
 
 ## Board Localization
 
-The localization of the chessboard uses basically the same idea as in the tutorial of Nesh Patel [[1]] on localization sudoku fields with a few adaptions. The process breaks down to 9 parts:
+The localization of the chessboard is based on the same core idea as the localization of sudoku fields tutorial by Nesh Patel [[1]] with a few adaptions and alterations. The process breaks down to 9 parts:
 
 <p align="center">
   <img src="misc/images/animation.gif" alt="Animation">
 </p>
 
 1. Grayscaling the image
-2. Bluring the image
+2. Blurring the image
 3. Edge detection using [Canny edge detector](https://en.wikipedia.org/wiki/Canny_edge_detector)
 4. [Dilate](https://docs.opencv.org/2.4/modules/imgproc/doc/filtering.html?highlight=dilate#dilate) to get thicker lines
 5. [Hough transform](https://en.wikipedia.org/wiki/Hough_transform) to identify horziontal and vertical lines
@@ -22,7 +22,7 @@ The localization of the chessboard uses basically the same idea as in the tutori
 8. Identifying the corners of the chessboard
 9. Warping the image
 
-After this, the image is cutted into 64 tiles which are then saved in an output directory:
+After this, the image is cut into 64 tiles which are then saved in an output directory:
 
 <p align="center">
   <img src="misc/images/1.jpg">
@@ -34,9 +34,9 @@ After this, the image is cutted into 64 tiles which are then saved in an output 
 
 ## Piece Recognition
 
-The data for training the neural network is based on 417 photographs of one chessboard which resulted in 3900 training (300 per chess piece + empty fields) and 7.800 validation images. Each image was labeled using a simple labeling tool which was specially designed for labeling the chess pieces. It simply moves every image to a corresponding folder with the class name of the piece as name. Afterwards the data was augmented using this [script](data/data_augmention.py). The process ended up in 31.200 training and 7.800 validation images.
+The data for training the neural network is based on 417 photographs of different arrangements on a single chessboard which resulted in 3900 training images (300 per chess piece + empty fields) and 7.800 validation images. Each image was labeled using a simple labeling tool which was specially designed for labeling the chess pieces. It functions by simply moving every image to a corresponding folder named for the pieces they contain. Afterwards, the data was augmented using this [script](data/data_augmention.py). The data augmentation process resulted in 31.200 training images and 7.800 validation images.
 
-To get a better understanding on how convolutional neural networks work the first version was built as a completely new CNN which was trained on [Google Colab](https://colab.research.google.com/). The results are shown below:
+To get a better understanding on how convolutional neural networks work, the first version was built as a completely new CNN which was trained on [Google Colab](https://colab.research.google.com/). The results are shown below:
 
 Chess pieces are labeled using their common notation:
 
@@ -66,7 +66,7 @@ Empty  | 100 %
 
 ### Second training
 
-Since the result of the first training had a very poor accuracy the training was done again using a pretrained version of resnet18 from PyTorch. The result was pretty good and it ended up with an accuracy of 99%.
+Since the result of the first training had a very poor accuracy, the training was done again using a pretrained version of resnet18 from PyTorch. The result was pretty good and it ended up with an accuracy of 99%.
 
 Epochs: 20<br>
 Best-Accuracy after epoch: 12<br>
@@ -102,3 +102,7 @@ When the idea for the project came up, it was almost certainly clear that somebo
 
 [1]: https://medium.com/@daylenyang/building-chess-id-99afa57326cd
 [2]: https://medium.com/@neshpatel/solving-sudoku-part-ii-9a7019d196a2
+
+## Special Thanks
+
+To my wonderful friend Aaron Winziers for making linguistic contributions to the project and its documentation
