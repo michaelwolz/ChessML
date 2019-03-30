@@ -6,7 +6,7 @@ ChessML performs basic board localization and piece recognition from photographs
 
 ## Board Localization
 
-The localization of the chessboard is based on the same core idea as the localization of sudoku fields tutorial by Nesh Patel [[1]] with a few adaptions and alterations. The process breaks down to 9 parts:
+The localization of the chessboard is based on the same core idea as in the tutorial by Nesh Patel \[[1]\] towards the localization of sudoku fields with a few adaptions and alterations. The process breaks down to 9 parts:
 
 <p align="center">
   <img src="misc/images/animation.gif" alt="Animation">
